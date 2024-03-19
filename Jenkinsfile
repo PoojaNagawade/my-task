@@ -20,17 +20,9 @@ pipeline {
         }
         stage("deploy"){
             steps{
-                sh "docker run -d mycode1"
+                sh "docker run -d mycode"
             }
         }
     }
-      post {
-            failure {
-                echo 'Deployment failed! Initiating rollback...'
-                sh "docker stop mycode1"
-                sh "docker rm mycode1"
-                sh "docker run -d --name ${CONTAINER_NAME} mycode:${buildPreviousTag}"
-                echo 'Rollback complete.'
-            }
-      }   
+      
 }
