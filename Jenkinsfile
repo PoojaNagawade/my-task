@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'mycode:${BUILD_NUMBER}'
+        DOCKER_IMAGE = 'mycode-${BUILD_NUMBER}'
         CONTAINER_NAME = 'mycode'
     }
 
