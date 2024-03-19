@@ -30,7 +30,7 @@ pipeline {
         }
         stage("Deploy"){
             steps{
-                sh "docker run -d ${DOCKER_IMAGE}"
+                sh "docker run -d ${DOCKER_IMAGE}_new"
             }
         }  
     }
