@@ -23,6 +23,11 @@ pipeline {
                 sh "docker run -d mycode"
             }
         }
+        post {
+        failure {
+            echo 'Deployment failed!'
+        }
+    }
         stage('Rollback') {
             when {
                 failure()
