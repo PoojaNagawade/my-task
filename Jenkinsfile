@@ -30,15 +30,15 @@ pipeline {
         }
         stage("Deploy"){
             steps{
-                sh "docker run -d ${DOCKER_IMAGE}_new"
+                sh "docker run -d --name ${CONTAINER_NAME} ${DOCKER_IMAGE}_new"
             }
         }  
     }
     post {
             failure {
                 echo 'Deployment failed! Initiating rollback...'
-                sh "docker stop ${DOCKER_IMAGE}"
-                sh "docker rm ${DOCKER_IMAGE}"
+                sh "docker stop ${CONTAINER_NAME}"
+                sh "docker rm ${CONTAINER_NAME}"
                 sh "docker run -d --name ${CONTAINER_NAME} ${CONTAINER_NAME}-${buildPreviousTag}"
                 echo 'Rollback complete.'
             }
