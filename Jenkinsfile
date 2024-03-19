@@ -18,6 +18,24 @@ pipeline {
             
             }
         }
+        stage("Docker Build Push: DockerHub"){
+            steps{
+              withCredentials([usernamePassword(credentialsId:"DockerCred",passwordVariable:"dockerhubpass",usernameVariable:"dockerhubname")]){
+                  sh "docker logout"
+                  sh "docker login -u ${env.dockerhubname} -p ${env.dockerhubpass}"
+                }
+            }
+        }
+        stage("Docker Tag"){
+            steps{
+                sh "docker tag mycode:latest poojanagawade/my_task:mycode"
+            }
+        }
+        stage("Code Push to DockerHub"){
+            steps{
+                sh "docker push poojanagawade/my_task:mycode"
+            }
+        }
         stage("deploy"){
             steps{
                 sh "docker run -d mycode"
