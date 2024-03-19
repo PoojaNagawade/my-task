@@ -23,6 +23,7 @@ pipeline {
                 sh "docker run -d mycode"
             }
         }
+    }
       post {
             failure {
                 echo 'Deployment failed! Initiating rollback...'
@@ -33,5 +34,5 @@ pipeline {
             }
         }
 
-    }
+    
 }
