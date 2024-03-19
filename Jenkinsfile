@@ -32,7 +32,5 @@ pipeline {
                 sh "docker run -d --name ${CONTAINER_NAME} myapp:${buildPreviousTag}"
                 echo 'Rollback complete.'
             }
-        }
-
-    
+      }   
 }
