@@ -20,7 +20,7 @@ pipeline {
         }
         stage("Docker Build Push: DockerHub"){
             steps{
-              withCredentials([usernamePassword(credentialsId:"DockerCred",passwordVariable:"dockerhubpass",usernameVariable:"dockerhubname")]){
+              withCredentials([usernamePassword(credentialsId:"Docker",passwordVariable:"dockerhubpass",usernameVariable:"dockerhubname")]){
                   sh "docker logout"
                   sh "docker login -u ${env.dockerhubname} -p ${env.dockerhubpass}"
                 }
