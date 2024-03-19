@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'myapp:${BUILD_NUMBER}'
-        CONTAINER_NAME = 'myapp-container'
+        DOCKER_IMAGE = 'mycode:${BUILD_NUMBER}'
+        CONTAINER_NAME = 'mycode'
     }
 
     stages {
