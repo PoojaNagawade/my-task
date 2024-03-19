@@ -14,7 +14,7 @@ pipeline {
         }
          stage("build"){
             steps{
-                sh "docker build -t mycode ."
+                sh "docker build -t ${DOCKER_IMAGE} ."
             
             }
         }
@@ -23,7 +23,7 @@ pipeline {
               withCredentials([usernamePassword(credentialsId:"Docker",passwordVariable:"dockerhubpass",usernameVariable:"dockerhubname")]){
                   sh "docker logout"
                   sh "docker login -u ${env.dockerhubname} -p ${env.dockerhubpass}"
-                  sh "docker tag mycode poojanagawade/my_task:${DOCKER_IMAGE}"
+                  sh "docker tag ${DOCKER_IMAGE} poojanagawade/my_task:${DOCKER_IMAGE}"
                   sh "docker push poojanagawade/my_task:${DOCKER_IMAGE}"
                 }
             }
