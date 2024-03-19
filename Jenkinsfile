@@ -20,7 +20,7 @@ pipeline {
         }
         stage("deploy"){
             steps{
-                sh "docker run -d mycode"
+                sh "docker run -d mycode1"
             }
         }
     }
