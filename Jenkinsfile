@@ -6,6 +6,11 @@ pipeline {
     }
 
     stages {
+        stage('Cleaning Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Clone') {
             steps {
                 git url: "https://github.com/PoojaNagawade/my-task.git", branch: "main"
