@@ -18,7 +18,7 @@ def extract_specific_data(data):
     return czk_data
 
 def generate_html_table(data):
-    html_content = "<html><head><title>Extracted Data</title></head><body><table border='1'>"
+    html_content = "<html><head><title>Extracted Data for Prague</title></head><body><table border='1'>"
     html_content += "<tr><th>Currency</th><th>Rate</th></tr>"
     for currency, rate in data.items():
         html_content += f"<tr><td>{currency}</td><td>{rate}</td></tr>"
