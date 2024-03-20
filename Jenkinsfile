@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'mycode-${BUILD_NUMBER}'
         CONTAINER_NAME='myapp-${BUILD_NUMBER}'
+        SONAR_HOME= tool "Sonar"
     }
 
     stages {
@@ -17,10 +18,37 @@ pipeline {
             }
             
         }
+        stage("SonarQube Analysis"){
+            steps{
+                withSonarQubeEnv("Sonar"){
+                    sh "$SONAR_HOME/bin/sonar-scanner -Dsonar.projectName=nodetodo -Dsonar.projectKey=nodetodo"
+                }
+            }
+        }
+        
+        stage("SonarQube Quality Gates"){
+                steps{
+                    timeout(time: 1, unit: "MINUTES"){
+                        waitForQualityGate abortPipeline: false
+                    }
+                }
+        }
+        
+        stage("OWASP Dependency Check"){
+            steps{
+                dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'dc'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
          stage("Build"){
             steps{
                 sh "docker build -t ${DOCKER_IMAGE} ."
             
+            }
+        }
+         stage("Docker Code Scan: Trivy"){
+            steps{
+                sh "trivy image ${DOCKER_IMAGE}"
             }
         }
         stage("Docker Build Push: DockerHub"){
