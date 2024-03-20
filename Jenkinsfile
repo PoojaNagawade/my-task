@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'mycode-${BUILD_NUMBER}'
-        CONTAINER_NAME='mycode'
+        CONTAINER_NAME='myapp-${BUILD_NUMBER}'
     }
 
     stages {
@@ -39,5 +39,16 @@ pipeline {
             }
         }  
     }
-      
+    post {
+    failure {
+        script {
+            echo 'Deployment failed! Initiating rollback...'
+            sh "docker stop ${CONTAINER_NAME}"
+            sh "docker rm ${CONTAINER_NAME}"
+            sh "docker run -d --name ${CONTAINER_NAME} mycode-${BUILD_NUMBER - 1}"
+            echo 'Rollback complete.'
+        }
+    }
+ }
+
 }
