@@ -39,16 +39,5 @@ pipeline {
             }
         }  
     }
-    post {
-    failure {
-        script {
-            echo 'Deployment failed! Initiating rollback...'
-            sh "docker stop ${CONTAINER_NAME}"
-            sh "docker rm ${CONTAINER_NAME}"
-            sh "docker run -d --name ${CONTAINER_NAME} mycode-${BUILD_NUMBER - 1}"
-            echo 'Rollback complete.'
-        }
-    }
- }
 
 }
