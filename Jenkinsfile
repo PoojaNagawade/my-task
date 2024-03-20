@@ -35,7 +35,7 @@ pipeline {
         }
         stage("Deploy"){
             steps{
-                sh "docker run -d --name ${CONTAINER_NAME} ${DOCKER_IMAGE}"
+                sh "docker run -d --name ${CONTAINER_NAME} ${DOCKER_IMAGE}_new"
             }
         }  
     }
