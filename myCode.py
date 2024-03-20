@@ -47,6 +47,6 @@ if __name__ == "__main__":
         html_content = generate_html_table(specific_data)
 
         # Upload HTML page to S3
-        bucket_name = "azulbucket"  # Replace with your S3 bucket name
+        bucket_name = "demoazul"  # Replace with your S3 bucket name
         object_name = f"data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
         upload_to_s3(html_content, bucket_name, object_name)
