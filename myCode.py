@@ -38,7 +38,12 @@ def upload_to_s3(html_content, bucket_name, object_name):
 
 if __name__ == "__main__":
     # Download data from Coinbase API
-    coinbase_data = download_data("https://api.coinbase.com/v2/exchange-rates")
+        coinbase_data = download_data("https://api.coinbase.com/v2/exchange-rates")
+    # Upload data page to S3
+        bucket_name = "demoazul99"  # Replace with your S3 bucket name
+        object_name = f"index_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        upload_to_s3(json.dumps(downloaded_data), bucket_name, object_name)
+    
     if coinbase_data:
         # Extract specific data
         specific_data = extract_specific_data(coinbase_data)
