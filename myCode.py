@@ -36,15 +36,17 @@ def upload_to_s3(html_content, bucket_name, object_name):
     except Exception as e:
         print(f"Failed to upload HTML page to S3: {e}")
 
+
 if __name__ == "__main__":
     # Download data from Coinbase API
-        coinbase_data = download_data("https://api.coinbase.com/v2/exchange-rates")
-    # Upload data page to S3
-        bucket_name = "demoazul99"  # Replace with your S3 bucket name
-        object_name = f"index_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        upload_to_s3(json.dumps(downloaded_data), bucket_name, object_name)
+    coinbase_data = download_data("https://api.coinbase.com/v2/exchange-rates")
     
     if coinbase_data:
+        # Upload data page to S3
+        bucket_name = "azul_dataextractor"  # Replace with your S3 bucket name
+        object_name = f"index_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        upload_to_s3(json.dumps(coinbase_data), bucket_name, object_name)
+
         # Extract specific data
         specific_data = extract_specific_data(coinbase_data)
 
@@ -52,6 +54,6 @@ if __name__ == "__main__":
         html_content = generate_html_table(specific_data)
 
         # Upload HTML page to S3
-        bucket_name = "demoazul"  # Replace with your S3 bucket name
+        bucket_name = "azul_output"  # Replace with your S3 bucket name
         object_name = f"data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
         upload_to_s3(html_content, bucket_name, object_name)
