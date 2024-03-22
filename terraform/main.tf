@@ -25,7 +25,6 @@ resource "aws_instance" "aws_ec2_test" {
  instance_type = "t2.micro"
 # refering key which we created earlier
   key_name = aws_key_pair.key.key_name
-  iam_instance_profile = aws_iam_role.ec2_role.name
   tags = {
         Name = "TerraformTestServerInstance"
       }
@@ -35,8 +34,6 @@ resource "aws_instance" "aws_ec2_test" {
 # Create an S3 bucket
 resource "aws_s3_bucket" "private_bucket" {
   bucket = "data-downloads"  # Replace with your desired private bucket name
-  acl    = "private"             # Set the ACL to private
-
   tags = {
     Name = "My Private Bucket"
   }
@@ -44,8 +41,6 @@ resource "aws_s3_bucket" "private_bucket" {
 
 resource "aws_s3_bucket" "public_bucket" {
   bucket = "filtered-output"    # Replace with your desired public bucket name
-  acl    = "public-read"         # Set the ACL to public-read
-
   tags = {
     Name = "My Public Bucket"
   }
