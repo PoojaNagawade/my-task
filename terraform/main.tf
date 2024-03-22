@@ -33,12 +33,21 @@ resource "aws_instance" "aws_ec2_test" {
 
 
 # Create an S3 bucket
-resource "aws_s3_bucket" "jenkins_bucket" {
-  bucket = "my-jenkins-bucket-azul"  # Replace with your desired bucket name
- # acl   = "public-read"         # Set the ACL to make the bucket publicly readable
+resource "aws_s3_bucket" "private_bucket" {
+  bucket = "data-downloads"  # Replace with your desired private bucket name
+  acl    = "private"             # Set the ACL to private
 
   tags = {
-    Name = "my-jenkins-bucket"
+    Name = "My Private Bucket"
+  }
+}
+
+resource "aws_s3_bucket" "public_bucket" {
+  bucket = "filtered-output"    # Replace with your desired public bucket name
+  acl    = "public-read"         # Set the ACL to public-read
+
+  tags = {
+    Name = "My Public Bucket"
   }
 }
 
