@@ -106,6 +106,14 @@ resource "aws_security_group" "jenkins_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+ egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"  # All protocols
+    cidr_blocks     = ["0.0.0.0/0"]  # Allow all outbound traffic
+  }
+
 }
 resource "aws_s3_bucket" "private_bucket" {
   bucket = var.private_bucket_name
