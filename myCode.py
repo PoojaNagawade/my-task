@@ -43,7 +43,7 @@ if __name__ == "__main__":
     
     if coinbase_data:
         # Upload data page to S3
-        bucket_name = "azul_dataextractor"  # Replace with your S3 bucket name
+        bucket_name = "mytask-datadownloads"  # Replace with your S3 bucket name
         object_name = f"index_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         upload_to_s3(json.dumps(coinbase_data), bucket_name, object_name)
 
@@ -54,6 +54,6 @@ if __name__ == "__main__":
         html_content = generate_html_table(specific_data)
 
         # Upload HTML page to S3
-        bucket_name = "azul_output"  # Replace with your S3 bucket name
+        bucket_name = "mytask-output"  # Replace with your S3 bucket name
         object_name = f"data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
         upload_to_s3(html_content, bucket_name, object_name)
