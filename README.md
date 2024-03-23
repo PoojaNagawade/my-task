@@ -1,4 +1,4 @@
-This project aims to automate the process of downloading data from a free data provider, extracting specific information, storing it in cloud storage, and presenting it using a simple HTML page. The project utilizes Python for scripting, Docker for containerization, Terraform for infrastructure provisioning, Jenkins for CI/CD, and AWS S3 for cloud storage.
+This project aims to automate the process of downloading data from a free data provider, extracting specific information, storing it in cloud storage, and presenting it using a simple HTML page. 
 
 # Overview
 The project follows these main steps:
@@ -19,3 +19,5 @@ Docker: Containerization tool to package the application and its dependencies.
 Terraform: Infrastructure as Code tool for provisioning cloud resources.
 Jenkins: Automation server for continuous integration and deployment.
 AWS S3: Cloud storage service for storing the extracted data and HTML page.
+
+
