@@ -62,7 +62,7 @@ resource "aws_instance" "aws_ec2_test" {
   }
 
  # iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
-  security_group_ids = [aws_security_group.jenkins_sg.id]
+  vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
 
   provisioner "remote-exec" {
     connection {
