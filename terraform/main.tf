@@ -56,30 +56,29 @@ resource "aws_instance" "aws_ec2_test" {
   ami           = var.ami_id
   instance_type = var.instance_type
   key_name      = aws_key_pair.key.key_name
-  
+
   tags = {
     Name = var.instance_name
   }
-  security_group_ids = [aws_security_group.jenkins_sg.id]
 
-  provisioner "remote-exec” {
-   connection {
+  iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
+
+  provisioner "remote-exec" {
+    connection {
       type        = "ssh"
       user        = "ubuntu"  # Update with the appropriate SSH user for your AMI
       private_key = file("~/.ssh/id_rsa")  # Update with the path to your SSH private key
-      host = aws_instance.aws_ec2_test.public_ip
+      host        = aws_instance.aws_ec2_test.public_ip
     }
+
     inline = [
-      “sudo apt update -y",
+      "sudo apt update -y",
       "sudo apt-get install docker.io -y",
-      "sudo apt install fontconfig openjdk-17-jre",
-      "sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
-        https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key",
-      "echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-       https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
-       /etc/apt/sources.list.d/jenkins.list > /dev/null",
+      "sudo apt install fontconfig openjdk-17-jre -y",
+      "sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key",
+      "echo \"deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/\" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null",
       "sudo apt-get update",
-      "sudo apt-get install jenkins",
+      "sudo apt-get install jenkins -y",
       "sudo systemctl start docker",
       "sudo systemctl enable docker",
       "sudo systemctl start jenkins",
@@ -87,6 +86,7 @@ resource "aws_instance" "aws_ec2_test" {
     ]
   }
 }
+
 
 resource "aws_security_group" "jenkins_sg" {
   name        = "jenkins-security-group"
