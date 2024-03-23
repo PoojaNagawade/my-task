@@ -60,8 +60,52 @@ resource "aws_instance" "aws_ec2_test" {
   tags = {
     Name = var.instance_name
   }
+  security_group_ids = [aws_security_group.jenkins_sg.id]
+
+  provisioner "remote-exec” {
+   connection {
+      type        = "ssh"
+      user        = "ec2-user"  # Update with the appropriate SSH user for your AMI
+      private_key = file("~/.ssh/id_rsa")  # Update with the path to your SSH private key
+      host = aws_instance.aws_ec2_test.public_ip
+    }
+    inline = [
+      “sudo apt update -y",
+      "sudo apt-get install docker.io -y",
+      "sudo apt install fontconfig openjdk-17-jre",
+      "sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+        https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key",
+      "echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+       https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+       /etc/apt/sources.list.d/jenkins.list > /dev/null",
+      "sudo apt-get update",
+      "sudo apt-get install jenkins",
+      "sudo systemctl start docker",
+      "sudo systemctl enable docker",
+      "sudo systemctl start jenkins",
+      "sudo systemctl enable jenkins"
+    ]
+  }
 }
 
+resource "aws_security_group" "jenkins_sg" {
+  name        = "jenkins-security-group"
+  description = "Security group for Jenkins"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
 resource "aws_s3_bucket" "private_bucket" {
   bucket = var.private_bucket_name
   
