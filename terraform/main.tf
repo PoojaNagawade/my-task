@@ -65,7 +65,7 @@ resource "aws_instance" "aws_ec2_test" {
   provisioner "remote-exec” {
    connection {
       type        = "ssh"
-      user        = "ec2-user"  # Update with the appropriate SSH user for your AMI
+      user        = "ubuntu"  # Update with the appropriate SSH user for your AMI
       private_key = file("~/.ssh/id_rsa")  # Update with the path to your SSH private key
       host = aws_instance.aws_ec2_test.public_ip
     }
