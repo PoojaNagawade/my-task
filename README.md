@@ -1,6 +1,6 @@
 This project aims to automate the process of downloading data from a free data provider, extracting specific information, storing it in cloud storage, and presenting it using a simple HTML page. The project utilizes Python for scripting, Docker for containerization, Terraform for infrastructure provisioning, Jenkins for CI/CD, and AWS S3 for cloud storage.
 
-#Overview
+# Overview
 The project follows these main steps:
 
 Data Download: Regularly download dataset from a chosen free data provider (e.g., Coinbase API or OpenWeatherMap).
@@ -13,7 +13,7 @@ HTML Page Generation: Generate a simple HTML page to display the extracted data 
 
 Automation: Utilize Terraform for automated provisioning of cloud resources and Jenkins for continuous integration and deployment.
 
-#Technologies Used
+# Technologies Used
 Python: Scripting language for data extraction and manipulation.
 Docker: Containerization tool to package the application and its dependencies.
 Terraform: Infrastructure as Code tool for provisioning cloud resources.
