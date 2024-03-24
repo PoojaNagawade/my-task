@@ -52,6 +52,46 @@ resource "aws_key_pair" "key" {
   public_key = file(var.public_key_path)
 }
 
+
+resource "aws_iam_policy" "s3_full_access_policy" {
+  name        = "s3_full_access_policy1"
+  description = "Policy granting full access to S3 buckets"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect   = "Allow",
+      Action   = "s3:*",
+      Resource = ["arn:aws:s3:::${var.private_bucket_name}", "arn:aws:s3:::${var.private_bucket_name}/*", "arn:aws:s3:::${var.public_bucket_name}", "arn:aws:s3:::${var.public_bucket_name}/*"]
+    }]
+  })
+}
+
+resource "aws_iam_role" "ec2_role" {
+  name = "new_ec2_S3_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect    = "Allow",
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      },
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_role_attachment" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = aws_iam_policy.s3_full_access_policy.arn
+}
+
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  name = "ec2_s3_instance_profile"
+  role = aws_iam_role.ec2_role.name
+}
+
+
 resource "aws_instance" "aws_ec2_test" {
   ami           = var.ami_id
   instance_type = var.instance_type
@@ -61,8 +101,9 @@ resource "aws_instance" "aws_ec2_test" {
     Name = var.instance_name
   }
 
- # iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
- vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
+  vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
+
+  iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
   provisioner "remote-exec" {
     connection {
@@ -89,7 +130,6 @@ resource "aws_instance" "aws_ec2_test" {
   }
 }
 
-
 resource "aws_security_group" "jenkins_sg" {
   name        = "jenkins-security-group"
   description = "Security group for Jenkins"
@@ -107,7 +147,7 @@ resource "aws_security_group" "jenkins_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
- 
+
   egress {
     from_port       = 0
     to_port         = 0
@@ -115,6 +155,7 @@ resource "aws_security_group" "jenkins_sg" {
     cidr_blocks     = ["0.0.0.0/0"]  # Allow all outbound traffic
   }
 }
+
 resource "aws_s3_bucket" "private_bucket" {
   bucket = var.private_bucket_name
   
