@@ -52,9 +52,6 @@ resource "aws_key_pair" "key" {
   public_key = file(var.public_key_path)
 }
 
-
-
-
 resource "aws_instance" "aws_ec2_test" {
   ami           = var.ami_id
   instance_type = var.instance_type
@@ -78,15 +75,12 @@ resource "aws_instance" "aws_ec2_test" {
       "sudo apt update -y",
       "sudo apt-get install docker.io -y",
       "sudo apt install default-jre -y",
+      "sudo apt-get install python3 -y",
       "sudo apt install fontconfig openjdk-17-jre -y",
       "sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key",
       "echo \"deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/\" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null",
       "sudo apt-get update",
-      "sudo apt-get install jenkins -y",
-      "sudo systemctl start docker",
-      "sudo systemctl enable docker",
-      "sudo systemctl start jenkins",
-      "sudo systemctl enable jenkins"
+      "sudo apt-get install jenkins -y"
     ]
   }
 }
@@ -119,7 +113,7 @@ resource "aws_security_group" "jenkins_sg" {
 
 
 resource "aws_s3_bucket_public_access_block" "example" {
-  bucket = aws_s3_bucket.my_bucket.id
+  bucket = aws_s3_bucket.public_bucket
 
   block_public_acls       = false
   block_public_policy     = false
@@ -128,7 +122,7 @@ resource "aws_s3_bucket_public_access_block" "example" {
 }
 
 resource "aws_s3_bucket_policy" "bucket_policy" {
-  bucket = aws_s3_bucket.my_bucket.id
+  bucket = aws_s3_bucket.public_bucket
 
   policy = <<EOF
 {
@@ -147,8 +141,6 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
 }
 EOF
 }
-
-
 
 resource "aws_s3_bucket" "private_bucket" {
   bucket = var.private_bucket_name
