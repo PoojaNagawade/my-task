@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-2"
+  region = "us-west-1"
 }
 
 variable "key_name" {
@@ -62,7 +62,7 @@ resource "aws_instance" "aws_ec2_test" {
   }
 
  # iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
-  vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
+ vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
 
   provisioner "remote-exec" {
     connection {
@@ -75,6 +75,7 @@ resource "aws_instance" "aws_ec2_test" {
     inline = [
       "sudo apt update -y",
       "sudo apt-get install docker.io -y",
+      "sudo apt install default-jre -y",
       "sudo apt install fontconfig openjdk-17-jre -y",
       "sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key",
       "echo \"deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/\" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null",
@@ -106,14 +107,13 @@ resource "aws_security_group" "jenkins_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
- egress {
+ 
+  egress {
     from_port       = 0
     to_port         = 0
     protocol        = "-1"  # All protocols
     cidr_blocks     = ["0.0.0.0/0"]  # Allow all outbound traffic
   }
-
 }
 resource "aws_s3_bucket" "private_bucket" {
   bucket = var.private_bucket_name
@@ -130,4 +130,3 @@ resource "aws_s3_bucket" "public_bucket" {
     Name = "My Public Bucket"
   }
 }
-
