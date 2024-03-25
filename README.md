@@ -31,7 +31,9 @@ AWS S3: Cloud storage service for storing the extracted data and HTML page.
 
 4.Go inside the terraform folder , Run the terraform main.tf script 
   terraform init 
-  terraform plan -var-file=filename 
+  
+  terraform plan -var-file=filename
+  
   terraform apply -var-file=filename
   
 5.Once the EC2 is up define IAM role to have s3 Full access
