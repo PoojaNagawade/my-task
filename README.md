@@ -24,16 +24,24 @@ AWS S3: Cloud storage service for storing the extracted data and HTML page.
 
 # Steps:
 1.Configure AWS CLI in your machine .
+
 2.Install terraform .
+
 3.Clone the project .
+
 4.Run the terraform main.tf script 
   terraform init 
   terraform plan -var-file=filename 
   terraform apply -var-file=filename
-5.Once the EC2 is up define IAM role to have s3 Full access 
-6.Jenkins ,Docker ,Python is already installed via Terraform 
-7.start the jenkins server .
+  
+5.Once the EC2 is up define IAM role to have s3 Full access
+
+6.Jenkins ,Docker ,Python is already installed via Terraform
+
+7.Start the jenkins server .
+
 8.Run the jenkins pipeline .
+
 9.The output will be stored in s3 bucket .
   
 # Output
