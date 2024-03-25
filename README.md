@@ -22,7 +22,7 @@ Jenkins: Automation server for continuous integration and deployment.
 AWS S3: Cloud storage service for storing the extracted data and HTML page.
 
 
-Steps:
+# Steps:
 1.Configure AWS CLI in your machine .
 2.Install terraform .
 3.Clone the project .
